@@ -22,8 +22,8 @@ public class PersonController {
         this.service = service;
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    @GetMapping("/all")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping("/")
     public ResponseEntity<?> findAll(){
         Iterable<Person> allPeople = service.findAll();
         List<Person> list = new ArrayList<>();
@@ -32,22 +32,27 @@ public class PersonController {
         return responseFindAll;
     }
 
-    @PostMapping("/create")
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable Long id){
+        Person personById = service.findById(id);
+        ResponseEntity responseFindId = new ResponseEntity(personById, HttpStatus.OK);
+        return responseFindId;
+    }
+    @PostMapping("/")
     public ResponseEntity<?> createPerson(@RequestBody Person person){
         Person responseBody = service.createPerson(person);
         ResponseEntity<?> responseCreatePerson = new ResponseEntity<>(responseBody, HttpStatus.CREATED);
         return responseCreatePerson;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePerson(@PathVariable Long id){
-        Optional<Person> responsePerson = service.delete(id);
+        Person responsePerson = service.delete(id);
         ResponseEntity<?> responseDeletePerson = new ResponseEntity(responsePerson, HttpStatus.OK);
-
         return responseDeletePerson;
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> editPerson(@PathVariable Long id, @RequestBody Person person){
         Person editedPerson = service.editPerson(id, person);
         ResponseEntity<?> responseEditPerson = new ResponseEntity<>(editedPerson, HttpStatus.OK);

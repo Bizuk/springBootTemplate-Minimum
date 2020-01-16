@@ -20,18 +20,32 @@ public class PersonService {
         return personRepository.findAll();
     }
 
+    public Person findById(Long id) {
+        Optional<Person> person = personRepository.findById(id);
+        return person.get();
+    }
     public Person createPerson(Person person) {
         return personRepository.save(person);
     }
 
-    public Optional<Person> delete(Long id) {
+    public Person delete(Long id) {
         Optional<Person> person = personRepository.findById(id);
         personRepository.deleteById(id);
-        return person;
+        return person.get();
     }
 
     public Person editPerson(Long id, Person person) {
-        person.setId(id);
-        return personRepository.save(person);
+        Optional<Person> optionalPerson = personRepository.findById(id);
+        Person personBefore = optionalPerson.get();
+        if(optionalPerson.isPresent()){
+            if(person.getFirstName() != null){
+                personBefore.setFirstName(person.getFirstName());
+            }
+            if(person.getLastName() != null){
+                personBefore.setLastName(person.getLastName());
+            }
+            return personRepository.save(personBefore);
+        }
+        return null;
     }
 }
