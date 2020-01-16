@@ -21,8 +21,9 @@ public class PersonService {
     }
 
     public Person findById(Long id) {
-        Optional<Person> person = personRepository.findById(id);
-        return person.get();
+//        Optional<Person> person = personRepository.findById(id);
+        Person person = personRepository.findById(id).orElse(new Person());
+        return person;
     }
     public Person createPerson(Person person) {
         return personRepository.save(person);
@@ -35,9 +36,9 @@ public class PersonService {
     }
 
     public Person editPerson(Long id, Person person) {
-        Optional<Person> optionalPerson = personRepository.findById(id);
-        Person personBefore = optionalPerson.get();
-        if(optionalPerson.isPresent()){
+        Person optionalPerson = this.findById(id);
+        Person personBefore = optionalPerson;
+
             if(person.getFirstName() != null){
                 personBefore.setFirstName(person.getFirstName());
             }
@@ -45,7 +46,5 @@ public class PersonService {
                 personBefore.setLastName(person.getLastName());
             }
             return personRepository.save(personBefore);
-        }
-        return null;
     }
 }
