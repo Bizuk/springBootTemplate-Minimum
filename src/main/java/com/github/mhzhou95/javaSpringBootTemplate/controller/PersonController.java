@@ -6,13 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/people")
@@ -34,10 +32,25 @@ public class PersonController {
         return responseFindAll;
     }
 
+    @PostMapping("/create")
     public ResponseEntity<?> createPerson(@RequestBody Person person){
         Person responseBody = service.createPerson(person);
-        ResponseEntity<?> responseCreatePerson = new ResponseEntity<>(responseBody, HttpStatus.OK);
+        ResponseEntity<?> responseCreatePerson = new ResponseEntity<>(responseBody, HttpStatus.CREATED);
         return responseCreatePerson;
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deletePerson(@PathVariable Long id){
+        Optional<Person> responsePerson = service.delete(id);
+        ResponseEntity<?> responseDeletePerson = new ResponseEntity(responsePerson, HttpStatus.OK);
+
+        return responseDeletePerson;
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> editPerson(@PathVariable Long id, @RequestBody Person person){
+        Person editedPerson = service.editPerson(id, person);
+        ResponseEntity<?> responseEditPerson = new ResponseEntity<>(editedPerson, HttpStatus.OK);
+        return responseEditPerson;
+    }
 }

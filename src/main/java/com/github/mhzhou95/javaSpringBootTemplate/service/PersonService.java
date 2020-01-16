@@ -5,6 +5,8 @@ import com.github.mhzhou95.javaSpringBootTemplate.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PersonService {
     private PersonRepository personRepository;
@@ -19,6 +21,17 @@ public class PersonService {
     }
 
     public Person createPerson(Person person) {
+        return personRepository.save(person);
+    }
+
+    public Optional<Person> delete(Long id) {
+        Optional<Person> person = personRepository.findById(id);
+        personRepository.deleteById(id);
+        return person;
+    }
+
+    public Person editPerson(Long id, Person person) {
+        person.setId(id);
         return personRepository.save(person);
     }
 }
