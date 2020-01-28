@@ -14,6 +14,13 @@ public class PersonService {
     @Autowired
     public PersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
+        Person person1 = new Person("John", "Doe");
+        Person person2 = new Person("Robin", "Hood");
+        Person person3 = new Person("Jack", "Sparrow");
+
+        this.createPerson(person1);
+        this.createPerson(person2);
+        this.createPerson(person3);
     }
 
     public Iterable<Person> findAll() {
